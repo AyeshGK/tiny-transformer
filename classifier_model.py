@@ -16,13 +16,13 @@ batch_size = 32
 epochs = 30
 num_heads = 4
 head_size = embeds_size // num_heads
-model_path = 'model_classification.pth'
+model_path = '/content/checkpoint/model_classification.pth'
 model_loader = False
 
 class DataSet(Dataset):
 	def __init__(self, mode):
 		super().__init__()
-		self.imdb_data = torch.tensor(torch.load(f"imdb/imdb_{mode}.json"))
+		self.imdb_data = torch.tensor(torch.load(f"/content/tiny-transformer/imdb/imdb_{mode}.json"))
 
 	def __getitem__(self, idx):
 		data = self.imdb_data[idx]

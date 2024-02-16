@@ -222,6 +222,9 @@ class UModel:
 		self.model_loss = nn.BCEWithLogitsLoss()
 		self.model_optimizer = torch.optim.RMSprop(self.model.parameters(), lr=4e-4)
 
+	def loss_fn(self,outputs, target):
+		return (outputs - target).pow(2).sum() * 0.5
+
 	def train(self, train_data, test_data):
 		for epoch in range(epochs):
 			losses = 0
@@ -246,6 +249,14 @@ class UModel:
 					if outputs.argmax() == targets.argmax():
 						passed += 1
 			self.model.train()
+			self.pc_trainer.train_on_batch(
+            # data, loss_fn,
+			train_data,self.loss_fn,
+            loss_fn_kwargs={
+                'target': targets,
+            },
+            **self.config['train_on_batch_kwargs'],
+        )
 			print(f'[{epoch}][Test]', ', accuracy', passed / len(dataset_y))
 
 		torch.save(self.model.state_dict(), model_path)

@@ -577,7 +577,7 @@ class PCTrainer(object):
         if loss_fn is not None:
             assert callable(loss_fn)
 
-        print("pc trainer step -1")
+        # print("pc trainer step -1")
 
         assert isinstance(loss_fn_kwargs, dict)
 
@@ -648,7 +648,7 @@ class PCTrainer(object):
         is_dynamic_x_lr = ((self._x_lr_discount < 1.0)
                            or (self._x_lr_amplifier > 1.0))
 
-        print("pc trainer step 2")
+        # print("pc trainer step 2")
 
         if is_dynamic_x_lr:
             overalls = []
@@ -811,7 +811,7 @@ class PCTrainer(object):
             if callback_after_backward is not None:
                 callback_after_backward(t, **callback_after_backward_kwargs)
 
-            print("pc trainer step 3")
+            # print("pc trainer step 3")
             # optimizer_x: step
             # x_lr_discount
             # x_lr_amplifier
@@ -922,7 +922,7 @@ class PCTrainer(object):
             # <- inference
 
 
-        print("pc trainer step 4")
+        # print("pc trainer step 4")
         # plot_progress
         if self._is_plot_progress:
 

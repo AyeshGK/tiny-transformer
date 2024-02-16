@@ -140,6 +140,7 @@ class transformer(nn.Module):
 # 				- 0.01
 # 				# - 0.1
 # 				# - 1.0
+# 		plot_progress_at: "[]"
 # train_on_batch_kwargs:
 # 	is_log_progress: False
 # 	is_return_results_every_t: False
@@ -163,6 +164,7 @@ config={
 			'lr': 0.00025,
 			'weight_decay': 0.01,
 		},
+		'plot_progress_at': "[]",
 	},
 	'train_on_batch_kwargs': {
 		'is_log_progress': False,
@@ -188,9 +190,9 @@ class UModel:
 		self.config['PCTrainer_kwargs']['optimizer_p_fn']=eval(
 			'torch.optim.{}'.format(self.config['PCTrainer_kwargs']['optimizer_p_fn'])
 		)
-		# self.config['PCTrainer_kwargs']['plot_progress_at']=eval(
-		# 	self.config['PCTrainer_kwargs']['plot_progress_at']
-		# )
+		self.config['PCTrainer_kwargs']['plot_progress_at']=eval(
+			self.config['PCTrainer_kwargs']['plot_progress_at']
+		)
 		self.pc_trainer = pc.PCTrainer(
 			self.model,
 			**self.config['PCTrainer_kwargs'],
@@ -205,7 +207,7 @@ class UModel:
 		self.model_optimizer = torch.optim.RMSprop(self.model.parameters(), lr=4e-4)
 
 	def loss_fn(self,outputs, target):
-		print("loss fn called")
+		# print("loss fn called")
 		return (outputs - target).pow(2).sum() * 0.5
 
 	def train(self, train_data, test_data):
@@ -220,6 +222,7 @@ class UModel:
 				loss.backward()
 				self.model_optimizer.step()
 				losses += loss.item()
+
 			print(f'[{epoch}][Train]', ', losses', losses)
 			self.model.eval()
 			test_loss = 0
@@ -232,15 +235,18 @@ class UModel:
 					if outputs.argmax() == targets.argmax():
 						passed += 1
 			self.model.train()
-			print("train data:",train_data)
-			self.pc_trainer.train_on_batch(
-				# data, loss_fn,
-				train_data,self.loss_fn,
-				loss_fn_kwargs={
-					'target': targets,
-				},
-            	**self.config['train_on_batch_kwargs'],
-        	)
+			# print("train data:",train_data)
+
+			for (inputs, targets) in train_data:
+				inputs = inputs.to(device)
+				targets = targets.to(device)
+				self.pc_trainer.train_on_batch(
+					inputs,self.loss_fn,
+					loss_fn_kwargs={
+						'target': targets,
+					},
+					**self.config['train_on_batch_kwargs'],
+				)
 			print("=================:",train_data)
 			print(f'[{epoch}][Test]', ', accuracy', passed / len(dataset_y))
 

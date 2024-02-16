@@ -96,6 +96,7 @@ class transformer(nn.Module):
 		return n_params
 
 	def forward(self, seq):
+		# print("seq :",seq)
 		B,T = seq.shape
 		embedded = self.tok_emb(seq)
 		embedded = embedded + self.pos_emb(torch.arange(T, device=device))
@@ -147,45 +148,26 @@ class transformer(nn.Module):
 # 	is_checking_after_callback_after_t: False
 	
 
-config = {
-	'predictive_coding': {
-		'update_x_at': 'all',
-		'optimizer_x_fn': 'SGD',
+config={
+	'PCTrainer_kwargs': {
+		'update_x_at': "all",
+		'optimizer_x_fn': "SGD",
 		'optimizer_x_kwargs': {
 			'lr': 0.5,
 		},
 		'x_lr_discount': 0.5,
 		'x_lr_amplifier': 1.0,
-		'update_p_at': 'all',
-		'optimizer_p_fn': 'Adam',
+		'update_p_at': "all",
+		'optimizer_p_fn': "Adam",
 		'optimizer_p_kwargs': {
 			'lr': 0.00025,
 			'weight_decay': 0.01,
 		},
 	},
-	# 'model': {
-	# 	'embeds_size': embeds_size,
-	# 	'num_heads': num_heads,
-	# 	'head_size': head_size,
-	# 	'block_size': block_size,
-	# 	'num_classes': num_classes,
-	# 	'drop_prob': drop_prob,
-	# },
-	'PCTrainer_kwargs': {
-		'plot_progress_at': '[]',
-		'update_x_at': 'all',
-		'optimizer_x_fn': 'SGD',
-		'optimizer_x_kwargs': {
-			'lr': 0.5,
-		},
-		'x_lr_discount': 0.5,
-		'x_lr_amplifier': 1.0,
-		'update_p_at': 'all',
-		'optimizer_p_fn': 'Adam',
-		'optimizer_p_kwargs': {
-			'lr': 0.00025,
-			'weight_decay': 0.01,
-		},
+	'train_on_batch_kwargs': {
+		'is_log_progress': False,
+		'is_return_results_every_t': False,
+		'is_checking_after_callback_after_t': False,
 	},
 }
 
@@ -201,14 +183,14 @@ class UModel:
 
 
 		self.config['PCTrainer_kwargs']['optimizer_x_fn']=eval(
-			'optim.{}'.format(self.config['PCTrainer_kwargs']['optimizer_x_fn'])
+			'torch.optim.{}'.format(self.config['PCTrainer_kwargs']['optimizer_x_fn'])
 		)
 		self.config['PCTrainer_kwargs']['optimizer_p_fn']=eval(
-			'optim.{}'.format(self.config['PCTrainer_kwargs']['optimizer_p_fn'])
+			'torch.optim.{}'.format(self.config['PCTrainer_kwargs']['optimizer_p_fn'])
 		)
-		self.config['PCTrainer_kwargs']['plot_progress_at']=eval(
-			self.config['PCTrainer_kwargs']['plot_progress_at']
-		)
+		# self.config['PCTrainer_kwargs']['plot_progress_at']=eval(
+		# 	self.config['PCTrainer_kwargs']['plot_progress_at']
+		# )
 		self.pc_trainer = pc.PCTrainer(
 			self.model,
 			**self.config['PCTrainer_kwargs'],
@@ -223,6 +205,7 @@ class UModel:
 		self.model_optimizer = torch.optim.RMSprop(self.model.parameters(), lr=4e-4)
 
 	def loss_fn(self,outputs, target):
+		print("loss fn called")
 		return (outputs - target).pow(2).sum() * 0.5
 
 	def train(self, train_data, test_data):
@@ -249,14 +232,16 @@ class UModel:
 					if outputs.argmax() == targets.argmax():
 						passed += 1
 			self.model.train()
+			print("train data:",train_data)
 			self.pc_trainer.train_on_batch(
-            # data, loss_fn,
-			train_data,self.loss_fn,
-            loss_fn_kwargs={
-                'target': targets,
-            },
-            **self.config['train_on_batch_kwargs'],
-        )
+				# data, loss_fn,
+				train_data,self.loss_fn,
+				loss_fn_kwargs={
+					'target': targets,
+				},
+            	**self.config['train_on_batch_kwargs'],
+        	)
+			print("=================:",train_data)
 			print(f'[{epoch}][Test]', ', accuracy', passed / len(dataset_y))
 
 		torch.save(self.model.state_dict(), model_path)

@@ -959,50 +959,50 @@ class PCTrainer(object):
                 # pd.set_option('display.max_rows', 500)
                 # input(data)
 
-                plt.figure()
-                sns.relplot(
-                    data=data,
-                    x="t",
-                    y="value",
-                    hue="h",
-                    palette="rocket_r",
-                    col="key",
-                    kind='line',
-                    facet_kws={
-                        "sharey": False,
-                        "legend_out": False,
-                    },
-                ).set(yscale='log')
-                plt.savefig(
-                    os.path.join(
-                        log_dir, "combined-{}.png".format(self._h)
-                    )
-                )
+            #     plt.figure()
+            #     sns.relplot(
+            #         data=data,
+            #         x="t",
+            #         y="value",
+            #         hue="h",
+            #         palette="rocket_r",
+            #         col="key",
+            #         kind='line',
+            #         facet_kws={
+            #             "sharey": False,
+            #             "legend_out": False,
+            #         },
+            #     ).set(yscale='log')
+            #     plt.savefig(
+            #         os.path.join(
+            #             log_dir, "combined-{}.png".format(self._h)
+            #         )
+            #     )
 
-                plt.figure()
-                sns.relplot(
-                    data=data,
-                    x="t",
-                    y="value",
-                    hue="h",
-                    row="h",
-                    palette="rocket_r",
-                    col="key",
-                    kind='line',
-                    facet_kws={
-                        "sharey": False,
-                        "legend_out": False,
-                    },
-                ).set(yscale='log')
-                plt.savefig(
-                    os.path.join(
-                        log_dir, "seperated-{}.png".format(self._h)
-                    )
-                )
+            #     plt.figure()
+            #     sns.relplot(
+            #         data=data,
+            #         x="t",
+            #         y="value",
+            #         hue="h",
+            #         row="h",
+            #         palette="rocket_r",
+            #         col="key",
+            #         kind='line',
+            #         facet_kws={
+            #             "sharey": False,
+            #             "legend_out": False,
+            #         },
+            #     ).set(yscale='log')
+            #     plt.savefig(
+            #         os.path.join(
+            #             log_dir, "seperated-{}.png".format(self._h)
+            #         )
+            #     )
 
-                plt.close()
+            #     plt.close()
 
-            self._h += 1
+            # self._h += 1
 
         return results
 

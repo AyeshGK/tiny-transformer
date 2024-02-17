@@ -924,36 +924,36 @@ class PCTrainer(object):
 
         # print("pc trainer step 4")
         # plot_progress
-        if self._is_plot_progress:
+        # if self._is_plot_progress:
 
-            utils.slow_down_warning("PCTrainer", "plot_progress_at", "[]")
+        #     utils.slow_down_warning("PCTrainer", "plot_progress_at", "[]")
 
-            if (isinstance(self._plot_progress_at, str) and self._plot_progress_at == "all") or (isinstance(self._plot_progress_at, list) and len(self._plot_progress_at) > 0 and self._h == max(self._plot_progress_at)):
+        #     if (isinstance(self._plot_progress_at, str) and self._plot_progress_at == "all") or (isinstance(self._plot_progress_at, list) and len(self._plot_progress_at) > 0 and self._h == max(self._plot_progress_at)):
 
-                input(
-                    "Is plot progress at {}? (Set plot_progress_at=[] in creation of pc_trainer to disable this. )".format(
-                        self._h
-                    )
-                )
+        #         input(
+        #             "Is plot progress at {}? (Set plot_progress_at=[] in creation of pc_trainer to disable this. )".format(
+        #                 self._h
+        #             )
+        #         )
 
-                working_home = os.environ.get('WORKING_HOME')
-                if working_home is None:
-                    working_home = "~/"
-                    warnings.warn(
-                        "Please specify your working home by setting the WORKING_HOME environment variable (using absolute path if you are using ray, otherwise relative path like ~/ is fine), defaulting to {}".format(
-                            working_home
-                        ),
-                        category=RuntimeWarning
-                    )
+        #         working_home = os.environ.get('WORKING_HOME')
+        #         if working_home is None:
+        #             working_home = "~/"
+        #             warnings.warn(
+        #                 "Please specify your working home by setting the WORKING_HOME environment variable (using absolute path if you are using ray, otherwise relative path like ~/ is fine), defaulting to {}".format(
+        #                     working_home
+        #                 ),
+        #                 category=RuntimeWarning
+        #             )
 
-                log_dir = os.path.join(
-                    working_home, "general-energy-nets", "plot_progress"
-                )
+        #         log_dir = os.path.join(
+        #             working_home, "general-energy-nets", "plot_progress"
+        #         )
 
-                if not os.path.exists(log_dir):
-                    os.makedirs(log_dir)
+        #         if not os.path.exists(log_dir):
+        #             os.makedirs(log_dir)
 
-                data = pd.DataFrame(self._plot_progress)
+                # data = pd.DataFrame(self._plot_progress)
 
                 # debug
                 # pd.set_option('display.max_rows', 500)

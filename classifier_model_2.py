@@ -227,7 +227,9 @@ class UModel:
 			self.model.eval()
 			test_loss = 0
 			passed = 0
+			k1 = 0
 			for (inputs, targets) in test_data:
+				k1+=1
 				with torch.no_grad():
 					inputs = inputs.to(device)
 					targets = targets.to(device)
@@ -235,8 +237,9 @@ class UModel:
 					if outputs.argmax() == targets.argmax():
 						passed += 1
 			self.model.train()
+			print("model trained:",k1)
 			# print("train data:",train_data)
-
+			k=0
 			for (inputs, targets) in train_data:
 				inputs = inputs.to(device)
 				targets = targets.to(device)
@@ -247,7 +250,8 @@ class UModel:
 					},
 					**self.config['train_on_batch_kwargs'],
 				)
-			print("=================:",train_data)
+				k+=1
+				print("k:",k)
 			print(f'[{epoch}][Test]', ', accuracy', passed / len(dataset_y))
 
 		torch.save(self.model.state_dict(), model_path)

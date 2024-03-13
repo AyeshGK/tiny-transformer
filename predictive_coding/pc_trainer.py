@@ -920,7 +920,7 @@ class PCTrainer(object):
                 break
 
             # <- inference
-
+        # print("pc trainer step 4")
 
         # print("pc trainer step 4")
         # plot_progress

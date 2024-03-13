@@ -1,4 +1,4 @@
-# Prospective Learning Simple Transformer 
+# Prospective Learning for Tiny Transformer
 
 Simple-Transformer is a repository featuring two key components:
 

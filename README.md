@@ -20,10 +20,6 @@ To optimize the performance of the tiny transformer model from our repository, w
 
 **GitHub Link:** [Prospective Configuration Repository](https://github.com/YuhangSong/Prospective-Configuration)
 
-## Acknowledgments
-
-Special thanks to Ayesh Vininda for their invaluable contributions to the development and refinement of our models.
-
 For further details and usage instructions, please refer to the respective repositories linked above.
 
 ---
